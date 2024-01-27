@@ -9,16 +9,49 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>Contador de Gastos</title>
 
-    <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+        .btn-edit,
+        .btn-delete {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-edit:hover,
+        .btn-delete:hover {
+            background-color: #45a049;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination .active {
+            font-weight: bold;
+        }
+
+        
+    </style>
 
 </head>
 
@@ -122,34 +155,54 @@
                         </div>
                     </div>
 
-                    <div class="mb-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</div>
+                    <div class="mb-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    </div>
+
 
 
                     <!-- Seção 2: Gastos Salvos  -->
-                    <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="col-xl-4 col-md-6 mb-4">
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
+                                    <div class="col">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-3">
                                             <i class="fas fa-list"></i> Gastos Salvos
                                         </div>
 
-                                        <div class="h5 mb-0  text-gray-800">
-                                            <ul id="listaGastos" class="list-group list-group-flush">
-                                            </ul>
-                                        </div>
+                                        <label for="selecionarMes">Selecionar Mês:</label>
+                                        <select id="selecionarMes" class="form-control" onchange="filtrarPorMes()">
+                                            <option value="todos">Todos os Meses</option>
+                                            <option value="01">Janeiro</option>
+                                            <option value="02">Fevereiro</option>
+                                            <option value="03">Março</option>
+                                            <option value="04">Abril</option>
+                                            <option value="05">Maio</option>
+                                            <option value="06">Junho</option>
+                                            <option value="07">Julho</option>
+                                            <option value="08">Agosto</option>
+                                            <option value="09">Setembro</option>
+                                            <option value="10">Outubro</option>
+                                            <option value="11">Novembro</option>
+                                            <option value="12">Dezembro</option>
+                                        </select>
+
+                                        <ul id="listaGastos" class="list-group list-group-flush">
+                                        </ul>
+
+                                        <div class="pagination" id="pagination"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mb-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</div>
+                    <div class="mb-4">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                    </div>
 
                     <!-- Seção 2: Gastos e Ganhos -->
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card border--primary shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
