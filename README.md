@@ -1,51 +1,56 @@
 
 # Contador de Gastos
+Este é um projeto de Contador de Gastos desenvolvido para auxiliar os usuários no gerenciamento de suas finanças pessoais. Com este aplicativo, é possível registrar e acompanhar os gastos mensais, proporcionando uma visão clara do orçamento disponível.
 
-The project is a personal expenses tracker that helps users manage and keep track of their spending. Users can log their expenses by entering details such as expense name, category, amount, and date. The interface is designed to be user-friendly, allowing quick and easy input of expenses.
+## Recursos Principais
+- Adicione nome, tipo (débito ou crédito), valor, mês e parcelas totais e atuais (caso seja crédito) para cada despesa.
+- Apresentação clara dos gastos em débito, crédito e totais.
+- Exibição da diferença entre o salário informado e os gastos totais.
+- Registro dos gastos anteriores, facilitando o acompanhamento mensal.
 
-## Run Locally
+## Como Usar
+-  Informe o salário mensal na entrada apropriada.
+-  Adicione os gastos mensais especificando nome, tipo, valor, mês e parcelas.
+-  Clique no botão "Adicionar Gasto" para registrar a despesa.
+-  A visualização dos gastos será atualizada automaticamente.
 
-Clone the project
+## Executar Localmente
+
+Clone o projeto
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/IanOliveiraSilva/Contador-de-Gastos
 ```
 
-Go to the project directory
+Vá para o diretorio do projeto
 
 ```bash
-  cd my-project
+  Execute o arquivo "Index.html"
 ```
 
-```bash
-  Execute the file "Index.html"
-```
+### Remoto
+Para usar remotamente, basta acessar o link:
+
+  - [Contador de Gastos](https://ianoliveirasilva.github.io/Contador-de-Gastos/)
 
 
+## Tecnologias Utilizadas
 
-
-
-### Remote
-To use remotely, just access the link:
-```bash
-  test.com
-```
-
-
-
-## Tech Stack
 ### Front end: 
-Html and Css
+HTML: para estruturar a página e os elementos visuais.
+
+CSS: para estilizar a página e definir a aparência dos elementos.
+
 ### Back end:
-Javascript
+JavaScript: para criar a lógica da aplicação dos gastos.
 
 
-## Authors
+## Autor
 
 - [@IanOliveiraSilva](https://github.com/IanOliveiraSilva)
 
 
 ## Feedback
 
-If you have any feedback, please reach out to us at ianoliveira.tec@gmail.com
+Se você tiver algum feedback, entre em contato comigo pelo e-mail ianoliveira.tec@gmail.com
 
