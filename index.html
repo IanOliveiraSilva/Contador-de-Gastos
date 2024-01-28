@@ -103,12 +103,17 @@
                         <div class="card border-left-primary shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
-                                    
+
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-3">
                                             <i class="fas fa-dollar-sign"></i> Salario Mensal
                                             <input type="number" id="salario" class="form-control"
-                                            placeholder="Informe o salário" oninput="calcularTotal()" /><br>
+                                                placeholder="Informe o salário" /><br>
+                                            <button class="btn-delete" onclick="apagarSalario()"><i
+                                                    class="fas fa-trash-alt"></i></button>
+                                            
+                                                    <button class="btn-delete" onclick="adicionarSalario()"><i class="fas fa-plus"></i> Adicionar Salario</button>
+                                            <br><br>
 
                                             <i class="fas fa-plus-circle"></i> Adicionar Gastos
                                         </div>

@@ -3,6 +3,8 @@ const gastos = [];
 const itemsPerPage = 10;
 let currentPage = 1;
 
+const salarioLocalStorage = localStorage.getItem('salario');
+
 function obterElemento(id) {
     return document.getElementById(id);
 }
@@ -22,6 +24,7 @@ function adicionarGasto() {
     const mesGasto = obterValorElemento('mesGasto');
     const numParcelas = parseInt(obterValorElemento('numParcelas'), 10) || 0;
     const numParcelaAtual = parseInt(obterValorElemento('numParcelaAtual'), 10) || 0;
+
 
     if (!nomeGasto.trim()) {
         alerta('Por favor, informe um nome para o gasto.');
@@ -169,8 +172,13 @@ function editarGasto(index) {
     calcularTotal();
 }
 
+if (salarioLocalStorage) {
+    document.getElementById("salario").value = parseFloat(salarioLocalStorage).toFixed(2);
+    calcularTotal();
+}
+
 function calcularTotal() {
-    const salario = parseFloat(obterValorElemento('salario')) || 0;
+    const salario = parseFloat(document.getElementById("salario").value) || 0;
 
     const { totalDebito, totalCredito } = calcularTotais();
 
@@ -183,6 +191,27 @@ function calcularTotal() {
     obterElemento('totalGastos').textContent = totalGastos.toFixed(2);
     obterElemento('diferencaSalario').textContent = diferencaSalario.toFixed(2);
     obterElemento('salarioTotal').textContent = salario.toFixed(2);
+
+    localStorage.setItem('salario', salario);
+}
+
+function adicionarSalario() {
+    const salarioInput = document.getElementById("salario");
+    const salario = parseFloat(salarioInput.value);
+
+    if (!isNaN(salario)) {
+        salarioInput.value = salario.toFixed(2);
+        calcularTotal();
+    } else {
+        alert("Por favor, informe um valor válido para o salário.");
+    }
+}
+
+
+function apagarSalario() {
+    const salarioInput = document.getElementById("salario");
+    salarioInput.value = "";
+    calcularTotal();
 }
 
 function calcularTotais(gastosArray) {
@@ -230,7 +259,7 @@ function filtrarPorMes() {
         });
 
         exibirGastos(gastosFiltrados);
-        
+
     }
 }
 
@@ -248,7 +277,7 @@ function configurarGrafico() {
         data: {
             labels: ["Débito", "Crédito", "Total"],
             datasets: [{
-                data: [totais.totalDebito, totais.totalCredito, totais.totalGeral],
+                data: [totais.totalDebito.toFixed(2), totais.totalCredito.toFixed(2), totais.totalGeral],
                 backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                 hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
