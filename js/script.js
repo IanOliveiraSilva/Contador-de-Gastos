@@ -1,5 +1,8 @@
 const gastos = [];
 
+const itemsPerPage = 10;
+let currentPage = 1;
+
 function obterElemento(id) {
     return document.getElementById(id);
 }
@@ -74,8 +77,9 @@ function criarElemento(tag, classe, conteudo) {
     return elemento;
 }
 
-const itemsPerPage = 10;
-let currentPage = 1;
+function mudarOrdem() {
+    exibirGastos();
+}
 
 function exibirGastos(gastosArray) {
     const listaGastos = obterElemento('listaGastos');
@@ -83,10 +87,23 @@ function exibirGastos(gastosArray) {
 
     const gastosParaExibir = gastosArray || gastos;
 
+    const ordem = obterValorElemento('ordem');
+
+    let gastosOrdenados;
+    if (ordem === 'alfabetica-az') {
+        gastosOrdenados = gastosParaExibir.slice().sort((a, b) => a.nome.localeCompare(b.nome));
+    } else if (ordem === 'alfabetica-za') {
+        gastosOrdenados = gastosParaExibir.slice().sort((a, b) => b.nome.localeCompare(a.nome));
+    } else if (ordem === 'maior-menor') {
+        gastosOrdenados = gastosParaExibir.slice().sort((a, b) => b.valor - a.valor);
+    } else if (ordem === 'menor-maior') {
+        gastosOrdenados = gastosParaExibir.slice().sort((a, b) => a.valor - b.valor);
+    }
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 
-    const gastosExibidos = gastosParaExibir.slice(startIndex, endIndex);
+    const gastosExibidos = gastosOrdenados.slice(startIndex, endIndex);
 
     for (const gasto of gastosExibidos) {
         const itemLista = criarElemento('li', 'list-group-item');
@@ -109,6 +126,7 @@ function exibirGastos(gastosArray) {
     exibirPaginacao();
 }
 
+
 function exibirPaginacao() {
     const totalPages = Math.ceil(gastos.length / itemsPerPage);
     const pagination = obterElemento('pagination');
@@ -126,8 +144,8 @@ function exibirPaginacao() {
 function trocarPagina(page) {
     currentPage = page;
     exibirGastos();
+    filtrarPorMes();
 }
-
 
 function excluirGasto(index) {
     gastos.splice(index, 1);
@@ -188,7 +206,6 @@ function calcularTotais(gastosArray) {
     };
 }
 
-
 function preencherSelect(idSelect, ...values) {
     const select = obterElemento(idSelect);
     select.innerHTML = '';
@@ -213,6 +230,7 @@ function filtrarPorMes() {
         });
 
         exibirGastos(gastosFiltrados);
+        
     }
 }
 
@@ -257,3 +275,31 @@ function configurarGrafico() {
 }
 
 configurarGrafico();
+
+function exportarParaCSV() {
+    const totais = calcularTotais();
+
+    let csvContent = "data:text/csv;charset=utf-8," +
+        "Nome,Tipo,Valor,Mes,Numero de Parcelas,Numero da Parcela Atual\n";
+
+    gastos.forEach(gasto => {
+        const linha = `${gasto.nome},${gasto.tipo},${gasto.valor},${gasto.mes},${gasto.numParcelas},${gasto.numParcelaAtual}\n`;
+        csvContent += linha;
+    });
+
+    csvContent += `\nGastos Totais, Gastos Credito, Gastos Debito\n${totais.totalGeral},${totais.totalCredito},${totais.totalDebito}`;
+
+    const encodedURI = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedURI);
+    link.setAttribute("download", "dados_gastos.csv");
+    document.body.appendChild(link);
+    link.click();
+}
+
+function limparGastos() {
+    gastos.length = 0;
+    exibirGastos();
+    calcularTotal();
+    salvarNoLocalStorage();
+}
