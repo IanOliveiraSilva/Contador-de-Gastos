@@ -49,9 +49,9 @@ function adicionarGasto() {
         numParcelaAtual: numParcelaAtual
     });
 
-    salvarNoLocalStorage(); // Salvar os gastos no local storage após a adição
+    salvarNoLocalStorage();
     exibirGastos();
-    calcularTotal(); // Calcular o total após a adição
+    calcularTotal();
     limparCamposGasto();
 }
 
@@ -127,7 +127,6 @@ function exibirGastos(gastosArray) {
 
     exibirPaginacao();
 }
-
 
 function exibirPaginacao() {
     const totalPages = Math.ceil(gastos.length / itemsPerPage);
@@ -207,13 +206,11 @@ function adicionarSalario() {
     }
 }
 
-
 function apagarSalario() {
     const salarioInput = document.getElementById("salario");
     salarioInput.value = "";
     calcularTotal();
 }
-
 
 function calcularTotais(gastosArray) {
     const gastosParaCalcular = gastosArray || JSON.parse(localStorage.getItem('gastos')) || [];
@@ -229,11 +226,16 @@ function calcularTotais(gastosArray) {
         }
     }
 
-    return {
+    const totais = {
         totalDebito,
         totalCredito,
         totalGeral: totalDebito + totalCredito,
     };
+
+    // Salvando os totais no localStorage
+    localStorage.setItem('totais', JSON.stringify(totais));
+
+    return totais;
 }
 
 function preencherSelect(idSelect, ...values) {
@@ -269,56 +271,28 @@ preencherSelect('numParcelaAtual', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
 carregarDoLocalStorage();
 
-function configurarGrafico() {
-    const totais = calcularTotais();
-
-    const ctx = obterElemento("myPieChart").getContext('2d');
-    const myPieChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Débito", "Crédito", "Total"],
-            datasets: [{
-                data: [totais.totalDebito, totais.totalCredito, totais.totalGeral],
-                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10,
-            },
-            legend: {
-                display: false
-            },
-            cutoutPercentage: 80,
-        },
-    });
-}
-
-configurarGrafico();
-
 function exportarParaCSV() {
     const totais = calcularTotais();
+    const salarioLocalStorage = localStorage.getItem('salario') || 0; // Se o salário não estiver definido, assume 0.
 
+    // Adiciona as informações do cabeçalho CSV
     let csvContent = "data:text/csv;charset=utf-8," +
         "Nome,Tipo,Valor,Mes,Numero de Parcelas,Numero da Parcela Atual\n";
 
+    // Adiciona as linhas de dados dos gastos
     gastos.forEach(gasto => {
         const linha = `${gasto.nome},${gasto.tipo},${gasto.valor},${gasto.mes},${gasto.numParcelas},${gasto.numParcelaAtual}\n`;
         csvContent += linha;
     });
 
+    // Adiciona as informações sobre os totais
     csvContent += `\nGastos Totais, Gastos Credito, Gastos Debito\n${totais.totalGeral},${totais.totalCredito},${totais.totalDebito}`;
 
+    // Adiciona as informações sobre o que sobra no mês e o salário
+    const sobraNoMes = salarioLocalStorage - totais.totalGeral;
+    csvContent += `\nSobra no Mês, Salario\n${sobraNoMes},${salarioLocalStorage}`;
+
+    // Cria o link para download e simula o clique
     const encodedURI = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedURI);
@@ -329,7 +303,7 @@ function exportarParaCSV() {
 
 function limparGastos() {
     gastos.length = 0;
+    salvarNoLocalStorage();
     exibirGastos();
     calcularTotal();
-    salvarNoLocalStorage();
 }
