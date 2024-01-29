@@ -25,7 +25,6 @@ function adicionarGasto() {
     const numParcelas = parseInt(obterValorElemento('numParcelas'), 10) || 0;
     const numParcelaAtual = parseInt(obterValorElemento('numParcelaAtual'), 10) || 0;
 
-
     if (!nomeGasto.trim()) {
         alerta('Por favor, informe um nome para o gasto.');
         return;
@@ -50,10 +49,10 @@ function adicionarGasto() {
         numParcelaAtual: numParcelaAtual
     });
 
+    salvarNoLocalStorage(); // Salvar os gastos no local storage após a adição
     exibirGastos();
-    calcularTotal();
+    calcularTotal(); // Calcular o total após a adição
     limparCamposGasto();
-    salvarNoLocalStorage();
 }
 
 function salvarNoLocalStorage() {
@@ -152,6 +151,7 @@ function trocarPagina(page) {
 
 function excluirGasto(index) {
     gastos.splice(index, 1);
+    salvarNoLocalStorage();
     exibirGastos();
     calcularTotal();
 }
@@ -213,6 +213,7 @@ function apagarSalario() {
     salarioInput.value = "";
     calcularTotal();
 }
+
 
 function calcularTotais(gastosArray) {
     const gastosParaCalcular = gastosArray || JSON.parse(localStorage.getItem('gastos')) || [];
@@ -277,7 +278,7 @@ function configurarGrafico() {
         data: {
             labels: ["Débito", "Crédito", "Total"],
             datasets: [{
-                data: [totais.totalDebito.toFixed(2), totais.totalCredito.toFixed(2), totais.totalGeral],
+                data: [totais.totalDebito, totais.totalCredito, totais.totalGeral],
                 backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
                 hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
